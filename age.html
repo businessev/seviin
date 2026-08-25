@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Age Calculator - Seeviin</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f1117;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .calculator {
+            width: 420px;
+            max-width: 100%;
+            background: #181b23;
+            border: 1px solid #292d38;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #999;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #292d38;
+            background: #0f1117;
+            color: white;
+            font-size: 17px;
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: white;
+            color: #111;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #0f1117;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .result-title {
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        #result {
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+
+        .back {
+            margin-top: 15px;
+            background: transparent;
+            color: white;
+            border: 1px solid #292d38;
+            font-weight: normal;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="calculator">
+
+    <h1>Age Calculator</h1>
+
+    <p class="subtitle">
+        Calculate your age precisely.
+    </p>
+
+    <label for="birthdate">
+        Date of birth
+    </label>
+
+    <input
+        type="date"
+        id="birthdate"
+    >
+
+    <button onclick="calculateAge()">
+        Calculate Age
+    </button>
+
+    <div class="result">
+
+        <div class="result-title">
+            Your age
+        </div>
+
+        <div id="result">
+            —
+        </div>
+
+    </div>
+
+    <button
+        class="back"
+        onclick="window.location.href='index.html'"
+    >
+        ← Back to Seeviin
+    </button>
+
+</div>
+
+
+<script>
+
+function calculateAge() {
+
+    const birthdate =
+        document.getElementById("birthdate").value;
+
+    if (!birthdate) {
+
+        document.getElementById("result").textContent =
+            "Please select your birth date";
+
+        return;
+    }
+
+    const birth = new Date(birthdate + "T00:00:00");
+    const today = new Date();
+
+    let years =
+        today.getFullYear() - birth.getFullYear();
+
+    let months =
+        today.getMonth() - birth.getMonth();
+
+    let days =
+        today.getDate() - birth.getDate();
+
+
+    if (days < 0) {
+
+        months--;
+
+        const previousMonth =
+            new Date(
+                today.getFullYear(),
+                today.getMonth(),
+                0
+            );
+
+        days += previousMonth.getDate();
+    }
+
+
+    if (months < 0) {
+
+        years--;
+        months += 12;
+    }
+
+
+    if (birth > today) {
+
+        document.getElementById("result").textContent =
+            "Invalid birth date";
+
+        return;
+    }
+
+
+    document.getElementById("result").innerHTML =
+        years + " years<br>" +
+        months + " months<br>" +
+        days + " days";
+}
+
+</script>
+
+</body>
+</html>
