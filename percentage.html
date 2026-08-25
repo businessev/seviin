@@ -109,16 +109,6 @@
             border: 1px solid #292d38;
             font-weight: normal;
         }
-
-        @media (max-width: 400px) {
-            .inputs {
-                gap: 6px;
-            }
-
-            .percent {
-                font-size: 18px;
-            }
-        }
     </style>
 </head>
 
@@ -137,21 +127,21 @@
     </div>
 
     <div class="inputs">
-placeholder="0"
+
         <input
             type="number"
             id="percent"
-           
+            value="0"
         >
 
         <div class="percent">%</div>
 
         <div>of</div>
-placeholder="0"
+
         <input
             type="number"
             id="number"
-           
+            value="0"
         >
 
     </div>
@@ -191,14 +181,6 @@ function calculate() {
 
     const number =
         parseFloat(document.getElementById("number").value);
-
-    if (isNaN(percent) || isNaN(number)) {
-
-        document.getElementById("result").textContent =
-            "Enter both numbers";
-
-        return;
-    }
 
     const result = (percent / 100) * number;
 
