@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Unit Converter - Seeviin</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f1117;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .converter {
+            width: 420px;
+            max-width: 100%;
+            background: #181b23;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #292d38;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #aaa;
+            margin-bottom: 8px;
+            margin-top: 15px;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #292d38;
+            background: #0f1117;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            background: #0f1117;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .result span {
+            display: block;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+
+        #result {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .back {
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px;
+            border: 1px solid #292d38;
+            border-radius: 10px;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .back:hover {
+            background: #292d38;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="converter">
+
+    <h1>Unit Converter</h1>
+
+    <label>Category</label>
+
+    <select id="category" onchange="updateUnits()">
+        <option value="length">Length</option>
+        <option value="weight">Weight</option>
+        <option value="temperature">Temperature</option>
+        <option value="speed">Speed</option>
+        <option value="time">Time</option>
+    </select>
+
+    <label>Value</label>
+
+    <input
+        type="number"
+        id="value"
+        placeholder="Enter a value"
+        oninput="convert()"
+    >
+
+    <div class="row">
+
+        <div>
+            <label>From</label>
+            <select id="from" onchange="convert()"></select>
+        </div>
+
+        <div>
+            <label>To</label>
+            <select id="to" onchange="convert()"></select>
+        </div>
+
+    </div>
+
+    <div class="result">
+
+        <span>Result</span>
+
+        <div id="result">0</div>
+
+    </div>
+
+    <button class="back" onclick="window.location.href='index.html'">
+        ← Back to Seeviin
+    </button>
+
+</div>
+
+<script>
+
+const units = {
+
+    length: {
+        meter: 1,
+        kilometer: 1000,
+        centimeter: 0.01,
+        millimeter: 0.001,
+        mile: 1609.344,
+        yard: 0.9144,
+        foot: 0.3048,
+        inch: 0.0254
+    },
+
+    weight: {
+        kilogram: 1,
+        gram: 0.001,
+        milligram: 0.000001,
+        pound: 0.45359237,
+        ounce: 0.0283495
+    },
+
+    speed: {
+        "km/h": 1,
+        "m/s": 3.6,
+        "mph": 1.609344,
+        "knot": 1.852
+    },
+
+    time: {
+        second: 1,
+        minute: 60,
+        hour: 3600,
+        day: 86400
+    }
+
+};
+
+
+function updateUnits() {
+
+    const category = document.getElementById("category").value;
+
+    const from = document.getElementById("from");
+    const to = document.getElementById("to");
+
+    from.innerHTML = "";
+    to.innerHTML = "";
+
+    if (category === "temperature") {
+
+        const temperatureUnits = ["Celsius", "Fahrenheit", "Kelvin"];
+
+        temperatureUnits.forEach(unit => {
+
+            from.innerHTML += `<option>${unit}</option>`;
+            to.innerHTML += `<option>${unit}</option>`;
+
+        });
+
+    } else {
+
+        Object.keys(units[category]).forEach(unit => {
+
+            from.innerHTML += `<option value="${unit}">${unit}</option>`;
+            to.innerHTML += `<option value="${unit}">${unit}</option>`;
+
+        });
+
+    }
+
+    convert();
+}
+
+
+function convert() {
+
+    const category = document.getElementById("category").value;
+
+    const value = parseFloat(document.getElementById("value").value);
+
+    const from = document.getElementById("from").value;
+
+    const to = document.getElementById("to").value;
+
+    if (isNaN(value)) {
+
+        document.getElementById("result").textContent = "0";
+        return;
+
+    }
+
+    let result;
+
+
+    if (category === "temperature") {
+
+        let celsius;
+
+        if (from === "Celsius") {
+            celsius = value;
+        }
+
+        else if (from === "Fahrenheit") {
+            celsius = (value - 32) * 5 / 9;
+        }
+
+        else if (from === "Kelvin") {
+            celsius = value - 273.15;
+        }
+
+
+        if (to === "Celsius") {
+            result = celsius;
+        }
+
+        else if (to === "Fahrenheit") {
+            result = (celsius * 9 / 5) + 32;
+        }
+
+        else if (to === "Kelvin") {
+            result = celsius + 273.15;
+        }
+
+    }
+
+    else {
+
+        const baseValue = value * units[category][from];
+
+        result = baseValue / units[category][to];
+
+    }
+
+
+    document.getElementById("result").textContent =
+        Number(result.toFixed(6)).toLocaleString();
+
+}
+
+
+updateUnits();
+
+</script>
+
+</body>
+</html>
